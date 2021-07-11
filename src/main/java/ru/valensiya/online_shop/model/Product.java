@@ -1,21 +1,21 @@
-package ru.valensiya.online_shop;
+package ru.valensiya.online_shop.model;
 
 public class Product {
-    private int id;
+    private Long id;
     private String title;
-    private int cost;
+    private int price;
 
-    public Product(int id, String title, int cost) {
+    public Product(Long id, String title, int price) {
         this.id = id;
         this.title = title;
-        this.cost = cost;
+        this.price = price;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -27,12 +27,12 @@ public class Product {
         this.title = title;
     }
 
-    public int getCost() {
-        return cost;
+    public int getPrice() {
+        return price;
     }
 
-    public void setCost(int cost) {
-        this.cost = cost;
+    public void setPrice(int price) {
+        this.price = price;
     }
 
     @Override
@@ -40,7 +40,7 @@ public class Product {
         return "Product{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
-                ", cost=" + cost +
+                ", price=" + price +
                 '}';
     }
 }

@@ -1,4 +1,4 @@
-package ru.valensiya.online_shop;
+package ru.valensiya.online_shop.model;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
