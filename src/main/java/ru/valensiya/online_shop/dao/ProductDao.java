@@ -39,12 +39,20 @@ public class ProductDao {
         }
     }
 
-    public Product save(Product product) {
+    public Product saveOrUpdate(Product product) {
         try (Session session = factory.getCurrentSession()) {
             session.beginTransaction();
-            session.save(product);
+            session.saveOrUpdate(product);
             session.getTransaction().commit();
             return product;
+        }
+    }
+
+    public void deleteById(Long id) {
+        try (Session session = factory.getCurrentSession()) {
+            session.beginTransaction();
+            session.delete(findById(id));
+            session.getTransaction().commit();
         }
     }
 }

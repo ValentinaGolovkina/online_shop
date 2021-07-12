@@ -30,6 +30,10 @@ public class ProductService {
         if (product.getPrice() <= 0) {
             return;
         }
-        productDao.save(product);
+        productDao.saveOrUpdate(product);
+    }
+
+    public void deleteById(Long id) {
+        productDao.deleteById(id);
     }
 }
