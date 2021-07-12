@@ -3,6 +3,7 @@ package ru.valensiya.online_shop.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.valensiya.online_shop.dao.ProductDao;
+import ru.valensiya.online_shop.model.Customer;
 import ru.valensiya.online_shop.model.Product;
 import ru.valensiya.online_shop.repositories.ProductRepository;
 
@@ -35,5 +36,9 @@ public class ProductService {
 
     public void deleteById(Long id) {
         productDao.deleteById(id);
+    }
+
+    public Product getProductByIdWithCustomers(Long id) {
+        return productDao.getProductByIdWithCustomers(id);
     }
 }

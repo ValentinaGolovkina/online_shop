@@ -1,9 +1,11 @@
 package ru.valensiya.online_shop.model;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "products")
+@NamedQuery(name="withCustomers", query = "SELECT p FROM Product p JOIN FETCH p.customers WHERE p.id= :id")
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -13,6 +15,13 @@ public class Product {
     private String title;
     @Column(name = "price")
     private int price;
+    @ManyToMany
+    @JoinTable(
+            name = "products_customers",
+            joinColumns = @JoinColumn(name = "products_id"),
+            inverseJoinColumns = @JoinColumn(name = "customer_id")
+    )
+    private List<Customer> customers;
 
     public Product(){}
 
@@ -46,12 +55,20 @@ public class Product {
         this.price = price;
     }
 
+    public List<Customer> getCustomers() {
+        return customers;
+    }
+
+    public void setCustomers(List<Customer> customers) {
+        this.customers = customers;
+    }
+
     @Override
     public String toString() {
-        return "Product{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", price=" + price +
-                '}';
+        return "Продукт(" +
+                "id:" + id +
+                ", название: " + title +
+                ", цена: " + price +
+                ')';
     }
 }

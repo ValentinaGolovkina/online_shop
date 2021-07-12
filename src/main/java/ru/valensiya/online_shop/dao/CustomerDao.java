@@ -9,57 +9,50 @@ import ru.valensiya.online_shop.model.Product;
 import java.util.List;
 
 @Component
-public class ProductDao {
-
+public class CustomerDao {
     private SessionFactory factory;
 
-    public ProductDao(ServiceFactory serviceFactory) {
+    public CustomerDao(ServiceFactory serviceFactory) {
         factory = serviceFactory.getFactory();
     }
 
-    public Product findById(Long id) {
+
+    public Customer findById(Long id) {
         try (Session session = factory.getCurrentSession()) {
             session.beginTransaction();
-            Product product = session.get(Product.class, id);
+            Customer customer = session.get(Customer.class, id);
             session.getTransaction().commit();
-            return product;
+            return customer;
         }
     }
 
-    public List<Product> findAll() {
+    public List<Customer> findAll() {
         try (Session session = factory.getCurrentSession()) {
             session.beginTransaction();
-            List<Product> products = session.createQuery("SELECT p FROM Product p", Product.class).getResultList();
+            List<Customer> customers = session.createQuery("SELECT c FROM Customer c", Customer.class).getResultList();
             session.getTransaction().commit();
-            return products;
+            return customers;
         }
     }
 
-    public Product saveOrUpdate(Product product) {
+    public Customer saveOrUpdate(Customer customer) {
         try (Session session = factory.getCurrentSession()) {
             session.beginTransaction();
-            session.saveOrUpdate(product);
+            session.saveOrUpdate(customer);
             session.getTransaction().commit();
-            return product;
+            return customer;
         }
     }
 
-    public void deleteById(Long id) {
+    public Customer getCustomerByIdWithProducts(Long id) {
         try (Session session = factory.getCurrentSession()) {
             session.beginTransaction();
-            session.delete(findById(id));
-            session.getTransaction().commit();
-        }
-    }
-
-    public Product getProductByIdWithCustomers(Long id) {
-        try (Session session = factory.getCurrentSession()) {
-            session.beginTransaction();
-            Product product = session.createNamedQuery("withCustomers", Product.class)
+            Customer customer = session.createNamedQuery("withProducts", Customer.class)
                     .setParameter("id", id)
                     .getSingleResult();
             session.getTransaction().commit();
-            return product;
+            return customer;
         }
     }
+
 }

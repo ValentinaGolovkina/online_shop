@@ -15,5 +15,6 @@
         <property name="current_session_context_class">thread</property>
 
         <mapping class="ru.valensiya.online_shop.model.Product"/>
+        <mapping class="ru.valensiya.online_shop.model.Customer"/>
     </session-factory>
 </hibernate-configuration>
