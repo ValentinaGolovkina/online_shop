@@ -2,6 +2,7 @@ package ru.valensiya.online_shop.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.valensiya.online_shop.dao.ProductDao;
 import ru.valensiya.online_shop.model.Product;
 import ru.valensiya.online_shop.repositories.ProductRepository;
 
@@ -9,19 +10,19 @@ import java.util.List;
 
 @Service
 public class ProductService {
-    private ProductRepository productRepository;
+    private ProductDao productDao;
 
     @Autowired
-    public ProductService(ProductRepository productRepository) {
-        this.productRepository = productRepository;
+    public ProductService(ProductDao productDao) {
+        this.productDao = productDao;
     }
 
     public List<Product> findAll() {
-        return productRepository.findAll();
+        return productDao.findAll();
     }
 
     public Product findById(Long id) {
-        return productRepository.findById(id);
+        return productDao.findById(id);
     }
 
     public void saveNewProduct(String title, int price) {
@@ -29,6 +30,10 @@ public class ProductService {
         if (product.getPrice() <= 0) {
             return;
         }
-        productRepository.save(product);
+        productDao.saveOrUpdate(product);
+    }
+
+    public void deleteById(Long id) {
+        productDao.deleteById(id);
     }
 }
