@@ -1,11 +1,15 @@
 package ru.valensiya.online_shop.model;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
 @Table(name = "customers")
-@NamedQuery(name="withProducts", query = "SELECT c FROM Customer c JOIN FETCH c.products WHERE c.id= :id")
+@Data
+@NoArgsConstructor
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,37 +24,6 @@ public class Customer {
             inverseJoinColumns = @JoinColumn(name = "products_id")
     )
     private List<Product> products;
-
-    public Customer(){}
-
-    public Customer(Long id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public List<Product> getProducts() {
-        return products;
-    }
-
-    public void setProducts(List<Product> products) {
-        this.products = products;
-    }
 
     @Override
     public String toString() {
