@@ -1,44 +1,48 @@
 package ru.valensiya.online_shop.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.valensiya.online_shop.dao.ProductDao;
-import ru.valensiya.online_shop.model.Customer;
 import ru.valensiya.online_shop.model.Product;
 import ru.valensiya.online_shop.repositories.ProductRepository;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class ProductService {
-    private ProductDao productDao;
-
-    @Autowired
-    public ProductService(ProductDao productDao) {
-        this.productDao = productDao;
-    }
+    private final ProductRepository productRepository;
 
     public List<Product> findAll() {
-        return productDao.findAll();
+        return productRepository.findAll();
     }
 
     public Product findById(Long id) {
-        return productDao.findById(id);
+        return productRepository.findById(id).get();
     }
 
-    public void saveNewProduct(String title, int price) {
-        Product product = new Product(null, title, price);
+    public Product saveNewProduct(String title, int price) {
+        Product product = new Product();
+        product.setTitle(title);
+        product.setPrice(price);
         if (product.getPrice() <= 0) {
-            return;
+            return null;
         }
-        productDao.saveOrUpdate(product);
+        return productRepository.save(product);
     }
 
     public void deleteById(Long id) {
-        productDao.deleteById(id);
+        productRepository.deleteById(id);
     }
 
-    public Product getProductByIdWithCustomers(Long id) {
-        return productDao.getProductByIdWithCustomers(id);
+    public List<Product> findByPrice(int min, int max) {
+        return productRepository.findAllByPriceBetween(min, max);
+    }
+
+    public List<Product> findByMaxPrice(int max) {
+        return productRepository.findAllByPriceLessThanEqual(max);
+    }
+
+    public List<Product> findByMinPrice(int min) {
+        return productRepository.findAllByPriceGreaterThanEqual(min);
     }
 }

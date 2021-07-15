@@ -1,22 +1,18 @@
 package ru.valensiya.online_shop.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
+import ru.valensiya.online_shop.model.Product;
 import ru.valensiya.online_shop.services.ProductService;
 
-@Controller
-public class ProductController {
-    private ProductService productService;
+import java.util.List;
 
-    @Autowired
-    public ProductController(ProductService productService) {
-        this.productService = productService;
-    }
+@RestController
+@RequiredArgsConstructor
+public class ProductController {
+    private final ProductService productService;
+
+/*
 
     @GetMapping
     public String showMainPage(Model model) {
@@ -28,16 +24,48 @@ public class ProductController {
     public String showAddProductForm() {
         return "add_product_form";
     }
+*/
 
-    @PostMapping("/products/add")
-    public String saveNewProduct(@RequestParam String title, @RequestParam int price) {
-        productService.saveNewProduct(title, price);
-        return "redirect:/";
-    }
 
     @GetMapping ("/products/{id}")
-    public String showProductInfo(Model model, @PathVariable Long id) {
-        model.addAttribute("product", productService.findById(id));
-        return "product_info";
+    @ResponseBody
+    public Product showProductInfo(@PathVariable Long id) {
+        return  productService.findById(id);
+    }
+
+    @GetMapping ("/products")
+    @ResponseBody
+    public List<Product> showAllProductsInfo() {
+        return  productService.findAll();
+    }
+
+    @GetMapping("/products/find_by_min_price")
+    @ResponseBody
+    public List<Product> findByMinPrice(@RequestParam(name = "min") int min) {
+        return productService.findByMinPrice(min);
+    }
+
+    @GetMapping("/products/find_by_max_price")
+    @ResponseBody
+    public List<Product> findByMaxPrice(@RequestParam(name = "max") int max) {
+        return productService.findByMaxPrice(max);
+    }
+
+    @GetMapping("/products/find_by_price")
+    @ResponseBody
+    public List<Product> findByMinPrice(@RequestParam(name = "min") int min, @RequestParam(name = "max") int max) {
+        return productService.findByPrice(min, max);
+    }
+
+    @PostMapping("/products")
+    public Product saveNewProduct(@RequestParam String title, @RequestParam int price) {
+        return productService.saveNewProduct(title, price);
+    }
+
+    @GetMapping ("/products/delete/{id}")
+    @ResponseBody
+    public String deleteProduct(@PathVariable Long id) {
+        productService.deleteById(id);
+        return "Продукт удален";
     }
 }
