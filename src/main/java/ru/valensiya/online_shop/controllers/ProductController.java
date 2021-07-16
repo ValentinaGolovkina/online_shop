@@ -12,21 +12,6 @@ import java.util.List;
 public class ProductController {
     private final ProductService productService;
 
-/*
-
-    @GetMapping
-    public String showMainPage(Model model) {
-        model.addAttribute("products", productService.findAll());
-        return "index";
-    }
-
-    @GetMapping("/products/add")
-    public String showAddProductForm() {
-        return "add_product_form";
-    }
-*/
-
-
     @GetMapping ("/products/{id}")
     @ResponseBody
     public Product showProductInfo(@PathVariable Long id) {
