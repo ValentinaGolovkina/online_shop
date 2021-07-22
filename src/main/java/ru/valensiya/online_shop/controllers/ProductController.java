@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import ru.valensiya.online_shop.dto.ProductDto;
+import ru.valensiya.online_shop.model.Category;
 import ru.valensiya.online_shop.model.Product;
+import ru.valensiya.online_shop.services.CategoryService;
 import ru.valensiya.online_shop.services.ProductService;
 
 @RestController
@@ -12,10 +14,12 @@ import ru.valensiya.online_shop.services.ProductService;
 @RequestMapping("/api/v1/products")
 public class ProductController {
     private final ProductService productService;
+    private final CategoryService categoryService;
 
     @GetMapping("/{id}")
     public ProductDto findById(@PathVariable Long id) {
-        return new ProductDto(productService.findById(id));
+        ProductDto productDto = new ProductDto(productService.findById(id));
+        return productDto;
     }
 
     @GetMapping
@@ -29,6 +33,8 @@ public class ProductController {
         Product product = new Product();
         product.setPrice(newProductDto.getPrice());
         product.setTitle(newProductDto.getTitle());
+        Category category = categoryService.findByTitle(newProductDto.getCategoryTitle());
+        product.setCategory(category);
         return new ProductDto(productService.save(product));
     }
 
