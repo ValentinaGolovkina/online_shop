@@ -1,31 +1,16 @@
 angular.module('app', []).controller('indexController', function ($scope, $http) {
-    $scope.loadProducts = function () {
-        $http({
-            url: 'http://localhost:8080/shop/products',
-            method: 'GET',
-            params: {}
-        }).then(function (response) {
-            console.log(response);
-            $scope.products = response.data;
-        });
-    };
-
     $scope.loadPage = function (pageIndex = 1) {
         $http({
-            url: 'http://localhost:8080/shop/products_page',
+            url: 'http://localhost:8080/shop/products',
             method: 'GET',
             params: {
                 'p': pageIndex
             }
         }).then(function (response) {
-            console.log(response);
+            $scope.productsPage = response.data;
+            $scope.navList = $scope.generatePagesIndexes(1, $scope.productsPage.totalPages);
+            console.log(response.data);
         });
-    };
-
-    $scope.counterValue = 1;
-
-    $scope.clickIncrementButton = function () {
-        $scope.counterValue += 1;
     };
 
     $scope.showProductInfo = function (productIndex) {
@@ -43,12 +28,17 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
             method: 'GET'
         }).then(function (response) {
             console.log(response);
+            $scope.loadPage();
         });
     };
 
-    $scope.showProductInfoWithoutRequest = function (productIndex) {
-        alert($scope.products[productIndex - 1].title); // Сильно упрощенный пример, в реальности работать не будет..
-    };
+    $scope.generatePagesIndexes = function (startPage, endPage) {
+        let arr = [];
+        for (let i = startPage; i < endPage + 1; i++) {
+            arr.push(i);
+        }
+        return arr;
+    }
 
-    $scope.loadProducts();
+    $scope.loadPage();
 });
