@@ -1,7 +1,8 @@
 angular.module('app', []).controller('indexController', function ($scope, $http) {
+    const contextPath = 'http://localhost:8080/shop';
     $scope.loadPage = function (pageIndex = 1) {
         $http({
-            url: 'http://localhost:8080/shop/products',
+            url: contextPath + '/api/v1/products',
             method: 'GET',
             params: {
                 'p': pageIndex
@@ -15,7 +16,7 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
 
     $scope.showProductInfo = function (productIndex) {
         $http({
-            url: 'http://localhost:8080/shop/products/' + productIndex,
+            url: contextPath + '/api/v1/products/' + productIndex,
             method: 'GET'
         }).then(function (response) {
             alert(response.data.title);
@@ -24,8 +25,8 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
 
     $scope.deleteProduct = function (productIndex) {
         $http({
-            url: 'http://localhost:8080/shop/products/delete/' + productIndex,
-            method: 'GET'
+            url: contextPath + '/api/v1/products/' + productIndex,
+            method: 'DELETE'
         }).then(function (response) {
             console.log(response);
             $scope.loadPage();

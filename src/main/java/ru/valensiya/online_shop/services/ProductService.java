@@ -22,33 +22,15 @@ public class ProductService {
         return productRepository.findById(id).get();
     }
 
-    public Product saveNewProduct(String title, int price) {
-        Product product = new Product();
-        product.setTitle(title);
-        product.setPrice(price);
-        if (product.getPrice() <= 0) {
-            return null;
-        }
-        return productRepository.save(product);
+    public Page<Product> findPage(int pageIndex, int pageSize) {
+        return productRepository.findAll(PageRequest.of(pageIndex, pageSize));
+    }
+
+    public Product save(Product newProduct) {
+        return productRepository.save(newProduct);
     }
 
     public void deleteById(Long id) {
         productRepository.deleteById(id);
-    }
-
-    public List<Product> findByPrice(int min, int max) {
-        return productRepository.findAllByPriceBetween(min, max);
-    }
-
-    public List<Product> findByMaxPrice(int max) {
-        return productRepository.findAllByPriceLessThanEqual(max);
-    }
-
-    public List<Product> findByMinPrice(int min) {
-        return productRepository.findAllByPriceGreaterThanEqual(min);
-    }
-
-    public Page<Product> findPage(int pageIndex, int pageSize) {
-        return productRepository.findAll(PageRequest.of(pageIndex, pageSize));
     }
 }
