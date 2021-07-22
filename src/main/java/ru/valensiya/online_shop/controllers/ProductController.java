@@ -1,6 +1,7 @@
 package ru.valensiya.online_shop.controllers;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import ru.valensiya.online_shop.model.Product;
 import ru.valensiya.online_shop.services.ProductService;
@@ -12,31 +13,15 @@ import java.util.List;
 public class ProductController {
     private final ProductService productService;
 
-/*
-
-    @GetMapping
-    public String showMainPage(Model model) {
-        model.addAttribute("products", productService.findAll());
-        return "index";
-    }
-
-    @GetMapping("/products/add")
-    public String showAddProductForm() {
-        return "add_product_form";
-    }
-*/
-
-
     @GetMapping ("/products/{id}")
     @ResponseBody
     public Product showProductInfo(@PathVariable Long id) {
         return  productService.findById(id);
     }
 
-    @GetMapping ("/products")
-    @ResponseBody
-    public List<Product> showAllProductsInfo() {
-        return  productService.findAll();
+    @GetMapping("/products")
+    public Page<Product> findAll(@RequestParam(name = "p", defaultValue = "1") int pageIndex) {
+        return productService.findPage(pageIndex - 1, 10);
     }
 
     @GetMapping("/products/find_by_min_price")
@@ -63,9 +48,7 @@ public class ProductController {
     }
 
     @GetMapping ("/products/delete/{id}")
-    @ResponseBody
-    public String deleteProduct(@PathVariable Long id) {
+    public void deleteProduct(@PathVariable Long id) {
         productService.deleteById(id);
-        return "Продукт удален";
     }
 }
