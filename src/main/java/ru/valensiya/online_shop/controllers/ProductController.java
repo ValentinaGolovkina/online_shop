@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import ru.valensiya.online_shop.dto.ProductDto;
+import ru.valensiya.online_shop.exceptions.ResourceNotFoundException;
 import ru.valensiya.online_shop.model.Category;
 import ru.valensiya.online_shop.model.Product;
 import ru.valensiya.online_shop.services.CategoryService;
@@ -18,14 +19,13 @@ public class ProductController {
 
     @GetMapping("/{id}")
     public ProductDto findById(@PathVariable Long id) {
-        ProductDto productDto = new ProductDto(productService.findById(id));
-        return productDto;
+        Product p = productService.findById(id).orElseThrow(() -> new ResourceNotFoundException("Product not found, id: " + id));
+        return new ProductDto(p);
     }
 
     @GetMapping
-    public Page<Product> findAll(@RequestParam(name = "p", defaultValue = "1") int pageIndex) {
-        Page<Product> page = productService.findPage(pageIndex - 1, 10);
-        return productService.findPage(pageIndex - 1, 10);
+    public Page<ProductDto> findAll(@RequestParam(name = "p", defaultValue = "1") int pageIndex) {
+        return productService.findPage(pageIndex - 1, 10).map(ProductDto::new);
     }
 
     @PostMapping

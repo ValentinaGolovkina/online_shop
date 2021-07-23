@@ -1,8 +1,8 @@
 angular.module('app', []).controller('indexController', function ($scope, $http) {
-    const contextPath = 'http://localhost:8080/shop';
+    const contextPath = 'http://localhost:8080/shop/api/v1';
     $scope.loadPage = function (pageIndex = 1) {
         $http({
-            url: contextPath + '/api/v1/products',
+            url: contextPath + '/products',
             method: 'GET',
             params: {
                 'p': pageIndex
@@ -14,18 +14,27 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
         });
     };
 
-    $scope.showProductInfo = function (productIndex) {
+    $scope.loadCart = function () {
         $http({
-            url: contextPath + '/api/v1/products/' + productIndex,
+            url: contextPath + '/cart',
             method: 'GET'
         }).then(function (response) {
-            alert(response.data.title);
+            $scope.cart = response.data;
         });
-    };
+    }
+
+    $scope.addToCart = function (productId) {
+        $http({
+            url: contextPath + '/cart/add/' + productId,
+            method: 'GET'
+        }).then(function (response) {
+            $scope.loadCart();
+        });
+    }
 
     $scope.deleteProduct = function (productIndex) {
         $http({
-            url: contextPath + '/api/v1/products/' + productIndex,
+            url: contextPath + '/products/' + productIndex,
             method: 'DELETE'
         }).then(function (response) {
             console.log(response);
@@ -42,4 +51,5 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
     }
 
     $scope.loadPage();
+    $scope.loadCart();
 });
