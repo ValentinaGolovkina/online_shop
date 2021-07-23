@@ -1,10 +1,7 @@
 package ru.valensiya.online_shop.controllers;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.valensiya.online_shop.exceptions.ResourceNotFoundException;
 import ru.valensiya.online_shop.services.ProductService;
 import ru.valensiya.online_shop.utils.Cart;
@@ -27,4 +24,26 @@ public class CartController {
             cart.add(productService.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Unable add product to cart. Product not found id: " + productId)));
         }
     }
+
+    @GetMapping("/inc/{productId}")
+    public void inc(@PathVariable Long productId) {
+        cart.changeQuantity(productId, 1);
+    }
+    @GetMapping("/dec/{productId}")
+    public void dec(@PathVariable Long productId) {
+        cart.changeQuantity(productId, -1);
+    }
+
+    @DeleteMapping("/{productId}")
+    public void deleteProduct(@PathVariable Long productId) {
+        if (!cart.deleteProductById(productId)) {
+            throw new ResourceNotFoundException("Unable delete product from cart. Product not found id: " + productId);
+        }
+    }
+
+    @DeleteMapping
+    public void clearCart() {
+        cart.clear();
+    }
+
 }

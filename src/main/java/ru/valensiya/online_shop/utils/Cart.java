@@ -51,4 +51,22 @@ public class Cart {
             price = price.add(oid.getPrice());
         }
     }
+
+    public boolean deleteProductById(Long productId) {
+        for (OrderItemDto o : items) {
+            if (o.getProductId().equals(productId)) {
+                items.remove(o);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void changeQuantity(Long productId, int i) {
+        for (OrderItemDto o : items) {
+            if (o.getProductId().equals(productId)) {
+                o.changeQuantity(i);
+            }
+        }
+    }
 }
