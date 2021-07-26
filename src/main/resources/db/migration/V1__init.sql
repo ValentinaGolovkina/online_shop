@@ -18,6 +18,17 @@ create table products
     updated_at  timestamp default current_timestamp
 );
 
+create table orders
+(
+    id          bigserial primary key,
+    number_order integer,
+    quantity integer,
+    price       numeric(8, 2) not null,
+    product_id bigint references products (id),
+    created_at  timestamp default current_timestamp,
+    updated_at  timestamp default current_timestamp
+);
+
 insert into products (title, price, category_id)
 values
 ('Молоко', 85, 1),
