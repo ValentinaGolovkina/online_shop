@@ -14,6 +14,16 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
         });
     };
 
+    $scope.makeOrder = function () {
+        console.log("Заказ отправлен");
+        $http({
+            url: contextPath + '/cart/order',
+            method: 'GET'
+        }).then(function (response) {
+            alert("Заказ принят. Номер вашего заказа: " + response.data);
+        });
+    }
+
     $scope.loadCart = function () {
         $http({
             url: contextPath + '/cart',
@@ -21,7 +31,7 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
         }).then(function (response) {
             $scope.cart = response.data;
         });
-    }
+    };
 
     $scope.addToCart = function (productId) {
         $http({
@@ -30,7 +40,7 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
         }).then(function (response) {
             $scope.loadCart();
         });
-    }
+    };
 
     $scope.deleteProduct = function (productIndex) {
         $http({
@@ -41,6 +51,45 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
             $scope.loadPage();
         });
     };
+
+    $scope.deleteProductFromCart = function (productIndex) {
+        $http({
+            url: contextPath + '/cart/' + productIndex,
+            method: 'DELETE'
+        }).then(function (response) {
+            console.log(response);
+            $scope.loadCart();
+        });
+    };
+
+    $scope.clearCart = function () {
+        $http({
+            url: contextPath + '/cart',
+            method: 'DELETE'
+        }).then(function (response) {
+            console.log(response);
+            $scope.loadCart();
+        });
+    };
+
+    $scope.incQuantity = function (productId) {
+        $http({
+            url: contextPath + '/cart/inc/' + productId,
+            method: 'GET'
+        }).then(function (response) {
+            $scope.loadCart();
+        });
+    }
+
+    $scope.decQuantity = function (productId) {
+        $http({
+            url: contextPath + '/cart/dec/' + productId,
+            method: 'GET'
+        }).then(function (response) {
+            $scope.loadCart();
+        });
+    }
+
 
     $scope.generatePagesIndexes = function (startPage, endPage) {
         let arr = [];

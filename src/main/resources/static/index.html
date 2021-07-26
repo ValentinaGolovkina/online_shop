@@ -61,16 +61,30 @@
         <tbody>
         <tr ng-repeat="oi in cart.items">
             <td>{{oi.productTitle}}</td>
-            <td>{{oi.quantity}}</td>
+            <td>
+                <button class="btn btn-secondary"  ng-click="decQuantity(oi.productId, -1)">-</button>
+                {{oi.quantity}}
+                <button class="btn btn-secondary"  ng-click="incQuantity(oi.productId)">+</button>
+            </td>
             <td>{{oi.quantity + ' x ' + oi.pricePerProduct + ' = ' + oi.price}}</td>
             <td>
-                <button class="btn btn-danger">Удалить (X)</button>
+                <button class="btn btn-danger"  ng-click="deleteProductFromCart(oi.productId)">Удалить</button>
             </td>
         </tr>
+        <tr>
+            <td>Итого: </td>
+            <td>{{cart.items.length}}</td>
+            <td>{{cart.price}}</td>
+            <td>
+                <button class="btn btn-danger" ng-click="clearCart()">Очистить корзину</button>
+            </td>
+        </tr>
+
         </tbody>
     </table>
 
-</nav>
+    <button class="btn btn-success" style="width: 100%" ng-click="makeOrder()">Оформить заказ</button>
+
 </div>
 </body>
 
