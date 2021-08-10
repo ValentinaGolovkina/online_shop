@@ -24,9 +24,7 @@ public class OrderItemDto {
     }
 
     public void changeQuantity(int amount) {
-        if(!(amount<0 && quantity==0)) {
-            quantity += amount;
-            price = pricePerProduct.multiply(BigDecimal.valueOf(quantity));
-        }
+        quantity += amount;
+        price = pricePerProduct.multiply(BigDecimal.valueOf(quantity));
     }
 }

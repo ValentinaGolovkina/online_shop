@@ -26,11 +26,13 @@ public class OrderService {
     private final Cart cart;
 
     @Transactional
-    public void createOrder(User user) {
+    public void createOrder(User user, String address, String phone) {
         Order order = new Order();
         order.setPrice(cart.getPrice());
         order.setItems(new ArrayList<>());
         order.setUser(user);
+        order.setPhone(phone);
+        order.setAddress(address);
         for (OrderItemDto o : cart.getItems()) {
             OrderItem orderItem = new OrderItem();
             orderItem.setOrder(order);

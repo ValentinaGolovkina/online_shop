@@ -2,10 +2,7 @@ package ru.valensiya.online_shop.controllers;
 
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.valensiya.online_shop.dto.OrderDto;
 import ru.valensiya.online_shop.exceptions.ResourceNotFoundException;
 import ru.valensiya.online_shop.model.User;
@@ -24,9 +21,9 @@ public class OrderController {
     private final UserService userService;
 
     @PostMapping
-    public void createOrder(Principal principal) {
+    public void createOrder(Principal principal, @RequestParam String address, @RequestParam String phone) {
         User user = userService.findByUsername(principal.getName()).orElseThrow(() -> new ResourceNotFoundException("Unable to create order. User not found"));
-        orderService.createOrder(user);
+        orderService.createOrder(user, address, phone);
     }
 
     @GetMapping
