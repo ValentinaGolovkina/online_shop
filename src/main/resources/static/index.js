@@ -1,4 +1,4 @@
-angular.module('app', []).controller('indexController', function ($scope, $http) {
+angular.module('app', ['ngStorage']).controller('indexController', function ($scope, $http, $localStorage) {
     const contextPath = 'http://localhost:8080/shop/api/v1';
     $scope.loadPage = function (pageIndex = 1) {
         $http({
@@ -13,16 +13,6 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
             console.log(response.data);
         });
     };
-
-    $scope.makeOrder = function () {
-        console.log("Заказ отправлен");
-        $http({
-            url: contextPath + '/cart/order',
-            method: 'GET'
-        }).then(function (response) {
-            alert("Заказ принят. Номер вашего заказа: " + response.data);
-        });
-    }
 
     $scope.loadCart = function () {
         $http({
@@ -72,6 +62,29 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
         });
     };
 
+
+    $scope.loadOrders = function () {
+        if (!$scope.isUserLoggedIn()) {
+            return;
+        }
+        $http({
+            url: contextPath + '/orders',
+            method: 'GET'
+        }).then(function (response) {
+            $scope.orders = response.data;
+        });
+    }
+
+    $scope.createOrder = function () {
+        $http({
+            url: contextPath + '/orders',
+            method: 'POST'
+        }).then(function (response) {
+            alert('Заказ создан');
+            $scope.loadCart();
+            $scope.loadOrders();
+        });
+    }
     $scope.incQuantity = function (productId) {
         $http({
             url: contextPath + '/cart/inc/' + productId,
@@ -99,6 +112,51 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
         return arr;
     }
 
+    $scope.tryToAuth = function () {
+        $http.post(contextPath + '/auth', $scope.user)
+            .then(function successCallback(response) {
+                if (response.data.token) {
+                    $http.defaults.headers.common.Authorization = 'Bearer ' + response.data.token;
+                    $localStorage.summerUser = {username: $scope.user.username, token: response.data.token};
+
+                    $scope.user.username = null;
+                    $scope.user.password = null;
+
+                    $scope.loadOrders();
+                }
+            }, function errorCallback(response) {
+            });
+    };
+
+    $scope.clearUser = function () {
+        delete $localStorage.summerUser;
+        $http.defaults.headers.common.Authorization = '';
+    };
+
+    $scope.tryToLogout = function () {
+        $scope.clearUser();
+        if ($scope.user.username) {
+            $scope.user.username = null;
+        }
+        if ($scope.user.password) {
+            $scope.user.password = null;
+        }
+    };
+
+    $scope.isUserLoggedIn = function () {
+        if ($localStorage.summerUser) {
+            return true;
+        } else {
+            return false;
+        }
+    };
+
+    if ($localStorage.summerUser) {
+        $http.defaults.headers.common.Authorization = 'Bearer ' + $localStorage.summerUser.token;
+        $scope.loadOrders();
+    }
+
     $scope.loadPage();
     $scope.loadCart();
+    $scope.loadOrders();
 });

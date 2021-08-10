@@ -13,7 +13,6 @@ import ru.valensiya.online_shop.utils.Cart;
 public class CartController {
     private final Cart cart;
     private final ProductService productService;
-    private final OrderService orderService;
 
     @GetMapping
     public Cart getCart() {
@@ -34,11 +33,6 @@ public class CartController {
     @GetMapping("/dec/{productId}")
     public void dec(@PathVariable Long productId) {
         cart.changeQuantity(productId, -1);
-    }
-
-    @GetMapping("/order")
-    public Integer order() {
-        return orderService.order();
     }
 
     @DeleteMapping("/{productId}")
