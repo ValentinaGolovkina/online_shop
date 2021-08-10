@@ -9,6 +9,7 @@ import ru.valensiya.online_shop.exceptions.ResourceNotFoundException;
 import ru.valensiya.online_shop.model.Order;
 import ru.valensiya.online_shop.model.OrderItem;
 import ru.valensiya.online_shop.model.Product;
+import ru.valensiya.online_shop.model.User;
 import ru.valensiya.online_shop.repositories.OrderRepository;
 import ru.valensiya.online_shop.utils.Cart;
 
@@ -25,10 +26,11 @@ public class OrderService {
     private final Cart cart;
 
     @Transactional
-    public void createOrder() {
+    public void createOrder(User user) {
         Order order = new Order();
         order.setPrice(cart.getPrice());
         order.setItems(new ArrayList<>());
+        order.setUser(user);
         for (OrderItemDto o : cart.getItems()) {
             OrderItem orderItem = new OrderItem();
             orderItem.setOrder(order);

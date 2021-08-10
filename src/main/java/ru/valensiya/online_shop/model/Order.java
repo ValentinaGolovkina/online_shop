@@ -28,6 +28,10 @@ public class Order {
     @Column(name = "price")
     private BigDecimal price;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     @CreationTimestamp
     @Column(name = "created_at")
     private LocalDateTime createdAt;
