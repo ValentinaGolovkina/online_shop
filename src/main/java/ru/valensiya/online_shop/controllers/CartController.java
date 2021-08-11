@@ -36,8 +36,8 @@ public class CartController {
         cart.remove(productId);
     }
 
-    @DeleteMapping
-    public void clearCart() {
+    @GetMapping("/clear")
+    public void clear() {
         cart.clear();
     }
 

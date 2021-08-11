@@ -10,6 +10,7 @@ import ru.valensiya.online_shop.model.Order;
 import ru.valensiya.online_shop.model.OrderItem;
 import ru.valensiya.online_shop.model.Product;
 import ru.valensiya.online_shop.model.User;
+import ru.valensiya.online_shop.repositories.OrderItemRepository;
 import ru.valensiya.online_shop.repositories.OrderRepository;
 import ru.valensiya.online_shop.utils.Cart;
 
@@ -22,6 +23,7 @@ import java.util.Random;
 @RequiredArgsConstructor
 public class OrderService {
     private final OrderRepository orderRepository;
+    private final OrderItemRepository orderItemRepository;
     private final ProductService productService;
     private final Cart cart;
 
@@ -49,5 +51,9 @@ public class OrderService {
 
     public List<Order> findAll() {
         return orderRepository.findAll();
+    }
+
+    public List<OrderItem> findItemsByOrder(Order order) {
+        return orderItemRepository.findOrderItemsByOrder(order);
     }
 }
