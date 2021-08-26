@@ -7,7 +7,9 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import ru.valensiya.online_shop.model.Product;
 import ru.valensiya.online_shop.repositories.ProductRepository;
+import ru.valensiya.online_shop.repositories.specifications.ProductSpecifications;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,5 +36,19 @@ public class ProductService {
 
     public void deleteById(Long id) {
         productRepository.deleteById(id);
+    }
+
+    public Page<Product> findPageWithFilter(int pageIndex, int pageSize,  BigDecimal minPrice, String title, BigDecimal maxPrice) {
+        Specification<Product> spec = Specification.where(null);
+        if (minPrice != null) {
+            spec = spec.and(ProductSpecifications.priceGreaterOrEqualsThan(minPrice));
+        }
+        if (title != null) {
+            spec = spec.and(ProductSpecifications.titleLike(title));
+        }
+        if (maxPrice != null) {
+            spec = spec.and(ProductSpecifications.priceLessOrEqualsThan(maxPrice));
+        }
+        return findPage(pageIndex, pageSize, spec);
     }
 }

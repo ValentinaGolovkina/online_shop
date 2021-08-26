@@ -14,4 +14,8 @@ public class ProductSpecifications {
     public static Specification<Product> titleLike(String title) {
         return (root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.like(root.get("title"), "%" + title + "%");
     }
+
+    public static Specification<Product> priceLessOrEqualsThan(BigDecimal maxPrice) {
+        return (root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.lessThan(root.get("price"), maxPrice);
+    }
 }

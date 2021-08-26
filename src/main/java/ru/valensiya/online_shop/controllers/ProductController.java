@@ -30,15 +30,9 @@ public class ProductController {
     @GetMapping
     public Page<ProductDto> findAll(@RequestParam(name = "p", defaultValue = "1") int pageIndex,
                                     @RequestParam(name = "min_price", required = false) BigDecimal minPrice,
-                                    @RequestParam(name = "title", required = false) String title) {
-        Specification<Product> spec = Specification.where(null);
-        if (minPrice != null) {
-            spec = spec.and(ProductSpecifications.priceGreaterOrEqualsThan(minPrice));
-        }
-        if (title != null) {
-            spec = spec.and(ProductSpecifications.titleLike(title));
-        }
-        return productService.findPage(pageIndex - 1, 10, spec).map(ProductDto::new);
+                                    @RequestParam(name = "title", required = false) String title,
+                                    @RequestParam(name = "max_price", required = false) BigDecimal maxPrice) {
+        return productService.findPageWithFilter(pageIndex - 1, 10, minPrice, title, maxPrice).map(ProductDto::new);
     }
 
     @PostMapping
