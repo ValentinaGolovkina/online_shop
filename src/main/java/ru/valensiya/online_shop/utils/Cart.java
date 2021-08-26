@@ -2,21 +2,15 @@ package ru.valensiya.online_shop.utils;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.valensiya.online_shop.dto.OrderItemDto;
-import ru.valensiya.online_shop.model.Order;
 import ru.valensiya.online_shop.model.Product;
-import ru.valensiya.online_shop.repositories.OrderRepository;
-import ru.valensiya.online_shop.services.ProductService;
 
 import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
 
 @Component
 @NoArgsConstructor

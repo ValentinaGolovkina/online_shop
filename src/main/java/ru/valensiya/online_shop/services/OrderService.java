@@ -1,9 +1,9 @@
 package ru.valensiya.online_shop.services;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.valensiya.online_shop.dto.OrderDto;
 import ru.valensiya.online_shop.dto.OrderItemDto;
 import ru.valensiya.online_shop.exceptions.ResourceNotFoundException;
 import ru.valensiya.online_shop.model.Order;
@@ -17,7 +17,7 @@ import ru.valensiya.online_shop.utils.Cart;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -49,8 +49,9 @@ public class OrderService {
         cart.clear();
     }
 
-    public List<Order> findAll() {
-        return orderRepository.findAll();
+    @Transactional
+    public List<OrderDto> findAllDtosByUsername(String username) {
+        return orderRepository.findAllByUsername(username).stream().map(OrderDto::new).collect(Collectors.toList());
     }
 
     public List<OrderItem> findItemsByOrder(Order order) {

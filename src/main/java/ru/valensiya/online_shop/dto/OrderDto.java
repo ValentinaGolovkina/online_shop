@@ -3,7 +3,6 @@ package ru.valensiya.online_shop.dto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.valensiya.online_shop.model.Order;
-import ru.valensiya.online_shop.model.OrderItem;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -18,11 +17,11 @@ public class OrderDto {
     private BigDecimal price;
     private List<OrderItemDto> items;
 
-    public OrderDto(Order order, List<OrderItem> items) {
+    public OrderDto(Order order) {
         this.id = order.getId();
         this.address = order.getAddress();
         this.phone = order.getPhone();
         this.price = order.getPrice();
-        this.items = items.stream().map((i)->new OrderItemDto(i.getProduct())).collect(Collectors.toList());;
+        this.items = order.getItems().stream().map(OrderItemDto::new).collect(Collectors.toList());
     }
 }

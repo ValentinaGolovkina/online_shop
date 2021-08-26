@@ -3,6 +3,7 @@ package ru.valensiya.online_shop.services;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import ru.valensiya.online_shop.model.Product;
 import ru.valensiya.online_shop.repositories.ProductRepository;
@@ -23,8 +24,8 @@ public class ProductService {
         return productRepository.findById(id);
     }
 
-    public Page<Product> findPage(int pageIndex, int pageSize) {
-        return productRepository.findAll(PageRequest.of(pageIndex, pageSize));
+    public Page<Product> findPage(int pageIndex, int pageSize, Specification<Product> spec) {
+        return productRepository.findAll(spec, PageRequest.of(pageIndex, pageSize));
     }
 
     public Product save(Product newProduct) {
